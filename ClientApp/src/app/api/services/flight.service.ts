@@ -25,53 +25,6 @@ export class FlightService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `findFlight()` */
-  static readonly FindFlightPath = '/Flight/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findFlight$Plain()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findFlight$Plain$Response(params: FindFlight$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<FlightRm>> {
-    return findFlight$Plain(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findFlight$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findFlight$Plain(params: FindFlight$Plain$Params, context?: HttpContext): Observable<FlightRm> {
-    return this.findFlight$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<FlightRm>): FlightRm => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findFlight()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findFlight$Response(params: FindFlight$Params, context?: HttpContext): Observable<StrictHttpResponse<FlightRm>> {
-    return findFlight(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findFlight$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findFlight(params: FindFlight$Params, context?: HttpContext): Observable<FlightRm> {
-    return this.findFlight$Response(params, context).pipe(
-      map((r: StrictHttpResponse<FlightRm>): FlightRm => r.body)
-    );
-  }
-
   /** Path part for operation `searchFlight()` */
   static readonly SearchFlightPath = '/Flight';
 
@@ -116,6 +69,53 @@ export class FlightService extends BaseService {
   searchFlight(params?: SearchFlight$Params, context?: HttpContext): Observable<Array<FlightRm>> {
     return this.searchFlight$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<FlightRm>>): Array<FlightRm> => r.body)
+    );
+  }
+
+  /** Path part for operation `findFlight()` */
+  static readonly FindFlightPath = '/Flight/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findFlight$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findFlight$Plain$Response(params: FindFlight$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<FlightRm>> {
+    return findFlight$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findFlight$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findFlight$Plain(params: FindFlight$Plain$Params, context?: HttpContext): Observable<FlightRm> {
+    return this.findFlight$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FlightRm>): FlightRm => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findFlight()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findFlight$Response(params: FindFlight$Params, context?: HttpContext): Observable<StrictHttpResponse<FlightRm>> {
+    return findFlight(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findFlight$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findFlight(params: FindFlight$Params, context?: HttpContext): Observable<FlightRm> {
+    return this.findFlight$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FlightRm>): FlightRm => r.body)
     );
   }
 
