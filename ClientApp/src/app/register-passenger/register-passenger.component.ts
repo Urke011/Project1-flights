@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PassengerService } from './../api/services/passenger.service';
 import { FormBuilder } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-passenger',
@@ -9,7 +11,8 @@ import { FormBuilder } from '@angular/forms';
 })
 export class RegisterPassengerComponent implements OnInit {
 
-  constructor(private passengerService: PassengerService, private fb: FormBuilder) {
+  constructor(private passengerService: PassengerService, private fb: FormBuilder,
+    private authService: AuthService, private router: Router ) {
 
   }
   form = this.fb.group({
@@ -22,9 +25,30 @@ export class RegisterPassengerComponent implements OnInit {
 
   }
 
+  checkPassenger(): void {
+    const params = { email: this.form.get('email')?.value! }
+
+    this.passengerService
+      .findPassenger(params)
+      .subscribe(
+        //console.log("Passenger exists. Logging in now")
+        this.login, e => {
+          if(e.status != 404)
+          console.error(e)
+        }
+      )
+  }
+
   register() {
     console.log("Form Values: ", this.form.value);
     this.passengerService.registerPassenger({ body: this.form.value })
-      .subscribe(_ => console.log("Form posted to Server"))
+      .subscribe( this.login, console.error)
+  }
+
+  private login=()=> {
+    this.authService.loginUser({
+      email: this.form.get('email')?.value!
+    })
+    this.router.navigate(['search-flights'])
   }
 }
