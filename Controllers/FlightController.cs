@@ -1,6 +1,6 @@
 ﻿using Flights.ReadModels;
 using Microsoft.AspNetCore.Mvc;
-
+using Flights.Dtos;
 namespace Project1.Controllers
 {
     [ApiController]
@@ -66,6 +66,8 @@ namespace Project1.Controllers
                 new TimePlaceRm("Zagreb",DateTime.Now.AddHours(random.Next(4, 60))),
                     random.Next(1, 853))
         };
+
+        static private IList<BookDto> Bookings = new List<BookDto>();
         public FlightController(ILogger<FlightController> logger)
         {
             _logger = logger;
@@ -90,6 +92,23 @@ namespace Project1.Controllers
                 return NotFound();
 
             return Ok(flight);
+        }
+        [HttpPost]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(200)]
+        public IActionResult Book(BookDto dto)
+        {
+            System.Diagnostics.Debug.WriteLine($"Booking a new flight {dto}");
+
+            var flightFound = flights.Any(f=> f.Id == dto.FlightId);
+
+            if(flightFound == false)
+            return NotFound();
+
+            Bookings.Add(dto);
+            return CreatedAtAction(nameof(Find), new {id = dto.FlightId});
         }
      }
     }

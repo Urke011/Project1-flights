@@ -34,7 +34,8 @@ export class RegisterPassengerComponent implements OnInit {
         //console.log("Passenger exists. Logging in now")
         this.login, e => {
           if(e.status != 404)
-          console.error(e)
+            console.error(e)
+        
         }
       )
   }
