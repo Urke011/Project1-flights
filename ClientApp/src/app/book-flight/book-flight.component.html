@@ -83,3 +83,12 @@
     </div>
   </form>
 </div>
+
+<div *ngIf="number.invalid && (number.dirty || number.touched)" class="invalid-feedback d-block">
+  <div *ngIf="number.errors?.['min']">
+    You can not book less then one passenger
+  </div>
+  <div *ngIf="number.errors?.['max']">
+    Our plans donot have more then 254 seats
+  </div>
+</div>
