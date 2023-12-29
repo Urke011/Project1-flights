@@ -9,15 +9,20 @@ namespace Flights.Controllers
     [ApiController]
     public class PassengerController : ControllerBase
     {
-        static IList<NewPassengerDto> Passengers = new List<NewPassengerDto>();
+        static IList<Passenger> Passengers = new List<Passenger>();
 
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult Register(NewPassengerDto dto)
+        public IActionResult Register(Passenger dto)
         {
-            Passengers.Add(dto);
+            Passengers.Add(new Passenger(
+                dto.Email,
+                dto.FirstName,
+                dto.LastName,
+                dto.Gender
+                ));
             // System.Diagnostics.Debug.WriteLine(Passenger.Count);
             return CreatedAtAction(nameof(Find),new {email = dto.Email});
             // throw new NotImplementedException();
