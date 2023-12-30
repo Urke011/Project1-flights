@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Flights.Dtos;
 using Flights.ReadModels;
+using Flights.Domain.Entities;
+using Flights.Data;
+
 namespace Flights.Controllers
 {
 
@@ -9,31 +12,36 @@ namespace Flights.Controllers
     [ApiController]
     public class PassengerController : ControllerBase
     {
-        static IList<Passenger> Passengers = new List<Passenger>();
+
+        private readonly Entities _entities;
+        public PassengerController(Entities entities)
+        {
+            _entities = entities;
+        }
 
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult Register(Passenger dto)
+        public IActionResult Register(Domain.Entities.Passenger dto)
         {
-            Passengers.Add(new Passenger(
+            _entities.Passengers.Add(new Domain.Entities.Passenger(
                 dto.Email,
                 dto.FirstName,
                 dto.LastName,
                 dto.Gender
                 ));
             // System.Diagnostics.Debug.WriteLine(Passenger.Count);
-            return CreatedAtAction(nameof(Find),new {email = dto.Email});
+            return CreatedAtAction(nameof(Find), new { email = dto.Email });
             // throw new NotImplementedException();
         }
         [HttpGet("{email}")]
         public ActionResult<PassengerRm> Find(string email)
         {
-            var passenger = Passengers.FirstOrDefault(x => x.Email == email);
+            var passenger = _entities.Passengers.FirstOrDefault(x => x.Email == email);
 
             if (passenger == null)
-            return NotFound();
+                return NotFound();
 
             var rm = new PassengerRm(
                 passenger.Email,
@@ -41,7 +49,7 @@ namespace Flights.Controllers
                 passenger.LastName,
                 passenger.Gender
                 );
-            
+
             return Ok(rm);
         }
     }
