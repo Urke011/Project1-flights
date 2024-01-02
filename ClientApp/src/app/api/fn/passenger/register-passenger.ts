@@ -6,10 +6,10 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { NewPassengerDto } from '../../models/new-passenger-dto';
+import { Passenger } from '../../models/passenger';
 
 export interface RegisterPassenger$Params {
-      body?: NewPassengerDto
+      body?: Passenger
 }
 
 export function registerPassenger(http: HttpClient, rootUrl: string, params?: RegisterPassenger$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
