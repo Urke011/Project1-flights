@@ -5,7 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
                                                            
-builder.Services.AddDbContext<Entities>(options => options.UseInMemoryDatabase(databaseName: "Flight"),ServiceLifetime.Singleton);
+builder.Services.AddDbContext<Entities>(options => options.UseSqlServer(
+    "Data Source=localhost,51192;" +
+    "Database=Flights;"+
+    "User id=sauros;"+
+    "Password=1234!Secret;"+
+    "TrustServerCertificate=True"
+    ));
 
 // Add services to the container.
 
@@ -20,12 +26,15 @@ builder.Services.AddSwaggerGen(c =>
     c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
 });
 
-builder.Services.AddSingleton<Entities>();
+builder.Services.AddScoped<Entities>();
 
 var app = builder.Build();
 
 var entities = app.Services.CreateScope().ServiceProvider.GetService<Entities>();
+entities.Database.EnsureCreated();
+
 var random = new Random();
+
 
 Flight[] flightsToSeed = new Flight[]
 {
