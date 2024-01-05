@@ -6,12 +6,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
                                                            
 builder.Services.AddDbContext<Entities>(options => options.UseSqlServer(
-    "Data Source=localhost,51192;" +
-    "Database=Flights;"+
-    "User id=sauros;"+
-    "Password=1234!Secret;"+
-    "TrustServerCertificate=True"
-    ));
+    builder.Configuration.GetConnectionString("Flights")));
 
 // Add services to the container.
 
@@ -36,7 +31,9 @@ entities.Database.EnsureCreated();
 var random = new Random();
 
 
-Flight[] flightsToSeed = new Flight[]
+if (!entities.Flights.Any())
+{
+    Flight[] flightsToSeed = new Flight[]
 {
     new (   Guid.NewGuid(),
                 "American Airlines",
@@ -87,8 +84,11 @@ Flight[] flightsToSeed = new Flight[]
                 new TimePlace("Zagreb",DateTime.Now.AddHours(random.Next(4, 60))),
                     random.Next(1, 853))
 };
-entities.Flights.AddRange(flightsToSeed);
-entities.SaveChanges();
+    entities.Flights.AddRange(flightsToSeed);
+    entities.SaveChanges();
+}
+
+
 
 app.UseCors(builder => builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader());
 
